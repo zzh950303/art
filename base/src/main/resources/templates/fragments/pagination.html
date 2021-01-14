@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="pagination(url)">
+        <style>
+            .tables_ps {
+                position: relative;
+                float: left;
+                margin-top: 10px;
+                white-space: nowrap;
+                width: 115px;
+            }
+            .tables_info {
+                position: relative;
+                float: left;
+                margin-top: 15px;
+                white-space: nowrap;
+                padding-left: 15px;
+            }
+            .tables_paginate {
+                float: right;
+                margin: 0;
+                margin-top: 10px;
+                text-align: right;
+                white-space: nowrap;
+            }
+            .tables_paginate ul.pagination {
+                margin: 0;
+                white-space: nowrap;
+            }
+        </style>
+
+        <div class="row" th:if="${request.count>0}">
+            <div class="col-sm-5">
+                <select id="pagination-ps" class="form-control tables_ps" onchange="return changePs();">
+                    <option th:selected="${request.ps == 15}" value="15">每页15条</option>
+                    <option th:selected="${request.ps == 50}" value="50">每页50条</option>
+                    <option th:selected="${request.ps == 100}" value="100">每页100条</option>
+                </select>
+                <div class="tables_info" th:text="|${request.curn}/${request.totaln}页, 共${request.count}项|"></div>
+            </div>
+            <div class="col-sm-7">
+                <div class="tables_paginate paging_simple_numbers">
+                    <ul class="pagination">
+                        <!-- 上一页 -->
+                        <li class="paginate_button first"
+                            th:classappend="${request.curn le 1} ? 'disabled' : ''"
+                            id="datatables_first"><a
+                            th:href="|${url}?curn=1&amp;ps=${request.ps}&amp;${condition}|"
+                            aria-controls="datatables" tabindex="0"><i
+                                class="icon fa-angle-double-left"></i></a>
+                        </li>
+                        <!-- 首页 -->
+                        <li class="paginate_button previous"
+                            th:classappend="${request.curn gt 1} ? '' : 'disabled'"
+                            id="datatables_previous"><a
+                            th:href="|${url}?curn=${request.curn-1}&amp;ps=${request.ps}&amp;${condition}|"
+                            aria-controls="datatables" tabindex="0"><i
+                                class="icon fa-angle-left"></i></a>
+                        </li>
+                        <li class="paginate_button"
+                            data-th-each="i : ${#numbers.sequence((request.curn-5 le 0 ? 1 : (request.curn+5 le request.totaln ? request.curn-5 : (request.totaln-10 gt 0 ? request.totaln-10 : 1))), (request.curn le 6 ? (request.totaln-10 ge 0 ? 10 : request.totaln) : (request.totaln-request.curn ge 5 ? request.curn+4 : request.totaln)))}"
+                            data-th-classappend="${request.curn eq i} ? 'active' : ''">
+                            <a
+                            th:href="|${url}?curn=${i}&amp;ps=${request.ps}&amp;${condition}|"
+                            aria-controls="datatables" data-th-attr="data-dt-idx=${i} - 1"
+                            tabindex="0" th:text="${i}"></a>
+                        </li>
+                        <!-- 下一页 -->
+                        <li class="paginate_button next"
+                            th:classappend="${request.curn lt request.totaln} ? '' : 'disabled'"
+                            id="datatables_next"><a
+                            th:href="|${url}?curn=${request.curn+1}&amp;ps=${request.ps}&amp;${condition}|"
+                            aria-controls="datatables" data-dt-idx="6" tabindex="0"><i
+                                class="icon fa-angle-right"></i></a></li>
+                        <!-- 最后一页 -->
+                        <li class="paginate_button last"
+                            th:classappend="${request.curn eq request.totaln || request.totaln eq 0} ? 'disabled' : ''"
+                            id="datatables_last"><a
+                            th:href="|${url}?curn=${request.totaln}&amp;ps=${request.ps}&amp;${condition}|"
+                            aria-controls="datatables" data-dt-idx="7" tabindex="0"><i
+                                class="icon fa-angle-double-right"></i></a></li>
+                    </ul>
+                    <script th:inline="javascript">
+                    /*<![CDATA[*/
+                    function changePs() {
+                        var ps = document.getElementById("pagination-ps").value;
+                        location.href = [[${url}]] + "?curn=1&ps=" + ps + "&" + [[${condition}]];
+                        return;
+                    }
+                    /*]]>*/
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

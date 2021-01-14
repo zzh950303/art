@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="fragments/head :: common_header(~{::title}, ~{::link}, ~{}, ~{})">
+        <title>Shadowfax 通用管理系统快速开发框架</title>
+        <base th:href="${assetDomain} + '/'" />
+
+        <!-- 自定义 -->
+        <link rel="stylesheet" th:href="@{css/login.css}" />
+
+        <!-- 插件 -->
+        <link rel="stylesheet" th:href="@{vendor/animsition/animsition.css}" />
+        <link rel="stylesheet" th:href="@{vendor/formvalidation/formValidation.css}" />
+        <link rel="stylesheet" th:href="@{vendor/toastr/toastr.css}">
+        <link rel="stylesheet" th:href="@{vendor/bootstrap-sweetalert/sweet-alert.css}">
+
+        <!-- 图标 -->
+        <link rel="stylesheet" th:href="@{fonts/web-icons/web-icons.css}" />
+
+        <!-- 验证码 -->
+        <link rel="stylesheet" type="text/css" th:href="@{css/captcha/verify.css}">
+    </head>
+
+    <body class="page-login layout-full page-dark">
+        <div class="page height-full">
+            <div class="page-content height-full">
+                <div class="page-brand-info vertical-align animation-slide-left hidden-xs">
+                    <div class="page-brand vertical-align-middle">
+                        <div class="brand">
+                            <img class="brand-img" src="images/logo-white.png" height="80" />
+                        </div>
+                        <h2 class="hidden-sm">Shadowfax 通用管理系统快速开发框架</h2>
+                    </div>
+                </div>
+                <div class="page-login-main animation-fade">
+                    <div id="captcha-panel">
+                    </div>
+                    <div class="vertical-align">
+                        <div class="vertical-align-middle">
+                            <div class="brand visible-xs text-center">
+                                <img class="brand-img" src="images/logo-white.png" height="50" />
+                            </div>
+                            <h3 class="hidden-xs">账户登录</h3>
+                            <form class="login-form" method="post" id="loginForm">
+                                <div class="form-group">
+                                    <label class="sr-only" for="username">用户名</label>
+                                    <input type="text" class="form-control" id="loginName" name="loginName" placeholder="请输入用户名" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="password">密码</label>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="请输入密码" />
+                                </div>
+                                <div class="form-group clearfix">
+                                    <div class="checkbox-custom checkbox-inline checkbox-primary pull-left">
+                                        <input type="checkbox" id="remember" name="remember" />
+                                        <label for="remember">自动登录</label>
+                                    </div>
+                                    <a class="pull-right collapsed" data-toggle="collapse" href="#forgetPassword" aria-expanded="false" aria-controls="forgetPassword">
+                                    忘记密码了？
+                                    </a>
+                                </div>
+                                <div class="collapse" id="forgetPassword" aria-expanded="true">
+                                    <div class="alert alert-warning alert-dismissible" role="alert">
+                                        请联系管理员重置密码。
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block margin-top-30" id="login-btn">立即登录</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script th:src="@{vendor/jquery/jquery.min.js}"></script>
+        <script th:src="@{vendor/bootstrap/bootstrap.min.js}"></script>
+        <script th:src="@{vendor/formvalidation/formValidation.min.js}" data-name="formValidation"></script>
+        <script th:src="@{vendor/formvalidation/framework/bootstrap.min.js}" data-deps="formValidation"></script>
+        <script th:src="@{vendor/toastr/toastr.min.js}"></script>
+        <script th:src="@{vendor/bootstrap-sweetalert/sweet-alert.min.js}"></script>
+
+        <script th:src="@{js/captcha/crypto-js.js}"></script>
+        <script th:src="@{js/captcha/ase.js}"></script>
+        <script th:src="@{js/captcha/verify.js}" ></script>
+
+        <script th:src="@{js/login.js?v=} + ${assetVersion}"></script>
+        <script type="text/javascript">
+            function kickout(){
+                var href=location.href;
+                if(href.indexOf("kickout")>0){
+                    toastr.error('您的账号在另一台设备上登录，如非本人操作，请立即修改密码！', '', {positionClass: "toast-top-center"});
+                }
+            }
+            window.onload=kickout();
+        </script>
+    </body>
+
+</html>

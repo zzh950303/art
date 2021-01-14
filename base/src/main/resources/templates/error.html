@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="fragments/head :: common_header(~{::title}, ~{::link}, ~{}, ~{})">
+        <title>出错了</title>
+
+        <link rel="stylesheet" th:href="@{css/errors.css}">
+        <link rel="stylesheet" th:href="@{fonts/7-stroke/7-stroke.css}">
+    </head>
+
+    <body class="page-errors layout-full">
+        <div class="page vertical-align text-center animation-fade page-error">
+            <div class="page-content vertical-align-middle">
+                <header>
+                    <h1 class="animation-slide-top">500</h1>
+                    <p>服务器内部错误</p>
+                    <p th:text="${exception}"></p>
+                </header>
+                <button class="btn btn-outline btn-primary btn-round" id="closeTab" href="javascript:;">关闭当前页</button>
+                <footer class="page-copyright">
+                    <p>&copy; 2020
+                        <a href="http://www.tcdigi.com" target="_blank">同程数科</a>
+                    </p>
+                </footer>
+
+                <script th:src="@{js/error.js}"></script>
+            </div>
+        </div>
+    </body>
+</html>

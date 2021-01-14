@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8" />
+        <title th:text="${title}"></title>
+        <base th:href="${assetDomain} + '/'" />
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <!-- 移动设备 viewport -->
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui" />
+        <meta name="author" content="wjz" />
+        <!-- 360浏览器默认使用Webkit内核 -->
+        <meta name="renderer" content="webkit">
+        <!-- 禁止搜索引擎抓取 -->
+        <meta name="robots" content="nofollow">
+        <!-- 禁止百度SiteAPP转码 -->
+        <meta http-equiv="Cache-Control" content="no-siteapp">
+        <!-- Chrome浏览器添加桌面快捷方式（安卓） -->
+        <link rel="icon" type="image/png" th:href="@{images/favicon.png}" />
+        <meta name="mobile-web-app-capable" content="yes">
+
+        <!--[if lte IE 9]>
+        <meta http-equiv="refresh" content="0; url='ie'" />
+        <![endif]-->
+        <!--[if lt IE 10]>
+        <script th:src="@{vendor/media-match/media.match.min.js}"></script>
+        <script th:src="@{vendor/respond/respond.min.js}"></script>
+        <![endif]-->
+
+        <!-- 样式 -->
+        <link rel="stylesheet" th:href="@{themes/classic/global/css/bootstrap.css}">
+        <link rel="stylesheet" th:href="@{themes/classic/base/css/site.css}" id="admui-siteStyle">
+        <link rel="stylesheet" th:href="@{css/main.css?v=} + ${assetVersion}"/>
+
+        <!-- 图标 CSS-->
+        <link rel="stylesheet" th:href="@{fonts/font-awesome/font-awesome.css}">
+        <link rel="stylesheet" th:href="@{fonts/web-icons/web-icons.css}">
+
+        <!-- 插件 CSS -->
+        <link rel="stylesheet" th:href="@{vendor/animsition/animsition.css}">
+        <link rel="stylesheet" th:href="@{vendor/toastr/toastr.css}">
+        <link rel="stylesheet" th:href="@{vendor/bootstrap-select/bootstrap-select.css}">
+        <link rel="stylesheet" th:href="@{vendor/toolbar/toolbar.css}">
+        <link rel="stylesheet" th:href="@{vendor/webui-popover/webui-popover.css}">
+        <link rel="stylesheet" th:href="@{vendor/icheck/icheck.css}">
+        <link rel="stylesheet" th:href="@{vendor/switchery/switchery.css}">
+        <link rel="stylesheet" th:href="@{vendor/bootstrap-sweetalert/sweet-alert.css}">
+
+        <!-- 插件 -->
+        <script th:src="@{vendor/jquery/jquery.min.js}"></script>
+        <script th:src="@{vendor/bootstrap/bootstrap.min.js}"></script>
+
+        <script th:src="@{js/main.js?v=} + ${assetVersion}"></script>
+    </head>
+    <body>
+        <!-- 插件 -->
+        <script th:src="@{vendor/artTemplate/template.min.js}"></script>
+        <script th:src="@{vendor/toastr/toastr.min.js}"></script>
+        <script th:src="@{vendor/bootstrap-select/bootstrap-select.min.js}"></script>
+        <script th:src="@{vendor/toolbar/jquery.toolbar.min.js}"></script>
+        <script th:src="@{vendor/webui-popover/jquery.webui-popover.min.js}"></script>
+        <script th:src="@{vendor/icheck/icheck.min.js}"></script>
+        <script th:src="@{vendor/switchery/switchery.min.js}"></script>
+        <script th:src="@{vendor/bootstrap-sweetalert/sweet-alert.min.js}"></script>
+        <script th:src="@{themes/classic/base/js/app.js}"></script>
+
+        <div th:include="::content"></div>
+
+        <script th:src="@{themes/classic/base/js/app.js}"></script>
+
+        <script type="text/javascript">
+        $('[data-toggle="tooltip"]').tooltip({trigger: 'hover'});
+        $('[data-toggle="popover"]').popover();
+        </script>
+    </body>
+</html>

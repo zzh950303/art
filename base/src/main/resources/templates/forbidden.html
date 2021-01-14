@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="fragments/head :: common_header(~{::title}, ~{::link}, ~{}, ~{})">
+        <title>没有权限</title>
+
+        <link rel="stylesheet" th:href="@{css/errors.css}">
+        <link rel="stylesheet" th:href="@{fonts/7-stroke/7-stroke.css}">
+    </head>
+
+    <body class="page-errors layout-full">
+        <div class="page vertical-align text-center animation-fade page-error">
+            <div class="page-content vertical-align-middle">
+                <header>
+                        <i class="icon pe-id" aria-hidden="true"></i>
+                        <h3>没有权限</h3>
+                        <p>您没有权限访问此页面，请联系管理员</p>
+                </header>
+                <button class="btn btn-outline btn-primary btn-round" id="closeTab" href="javascript:;">关闭当前页</button>
+                <footer class="page-copyright">
+                    <p>&copy; 2020
+                        <a href="http://www.tcdigi.com" target="_blank">同程数科</a>
+                    </p>
+                </footer>
+
+                <script th:src="@{js/error.js}"></script>
+            </div>
+        </div>
+    </body>
+</html>

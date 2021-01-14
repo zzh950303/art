@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+<!--    <bean id="redisManager" class="com.ly.fn.biz.pay.giftcard.oss.security.cache.RedisManager">-->
+<!--        <property name="expire" value="1800" />-->
+<!--        <property name="redisTemplate" ref="biz-pay-giftcard-oss.ConcurrentControlRedisTemplate" />-->
+<!--    </bean>-->
+<!--    <bean id="redisShiroSessionDAO" class="com.ly.fn.biz.pay.giftcard.oss.security.cache.RedisSessionDAO">-->
+<!--        <property name="redisManager" ref="redisManager" />-->
+<!--    </bean>-->
+
+    <!-- 会话ID生成器 -->
+    <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator" />
+    <!-- 会话Cookie模板 -->
+    <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg value="sid"/>
+        <property name="httpOnly" value="true" />
+        <property name="maxAge" value="180000" />
+    </bean>
+    <!-- 会话DAO -->
+    <bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
+        <property name="activeSessionsCacheName" value="shiro-activeSessionCache" />
+        <property name="sessionIdGenerator" ref="sessionIdGenerator" />
+    </bean>
+    <!-- 会话管理器 -->
+    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <property name="globalSessionTimeout" value="1800000" />
+        <property name="deleteInvalidSessions" value="true" />
+        <property name="sessionValidationSchedulerEnabled" value="true" />
+<!--        <property name="sessionValidationScheduler" ref="sessionValidationScheduler" />-->
+<!--        <property name="sessionDAO" ref="redisShiroSessionDAO" />-->
+        <property name="sessionIdCookieEnabled" value="true" />
+        <property name="sessionIdCookie" ref="sessionIdCookie" />
+    </bean>
+
+    <!-- Realm实现 -->
+    <bean id="customRealm" class="com.ly.art.framework.shiro.realm.UserRealm"/>
+
+    <!-- 安全管理器 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="customRealm" />
+        <property name="sessionManager" ref="sessionManager" />
+    </bean>
+
+    <!-- Shiro的Web过滤器 -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager" />
+        <property name="loginUrl" value="/loginPage" />
+        <property name="successUrl" value="/homePage" />
+        <property name="unauthorizedUrl" value="/noPermission" />
+        <property name="filterChainDefinitions">
+            <value>
+                /health = anon
+                /info = anon
+                /xpro/** = anon
+                /nohup.html = anon
+                /js/** = anon
+                /css/** = anon
+                /fonts/** = anon
+                /images/** = anon
+                /themes/** = anon
+                /vendor/** = anon
+                /ie = anon
+                /login = anon
+                /loginPage = anon
+                /signin = anon
+                /logout = anon
+                /expireByAjax = anon
+                /captcha/** = anon
+                /** = authc
+            </value>
+        </property>
+    </bean>
+
+    <!-- Shiro生命周期处理器-->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+</beans>

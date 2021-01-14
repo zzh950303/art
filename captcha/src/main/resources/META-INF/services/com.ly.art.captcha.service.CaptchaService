@@ -1,0 +1,3 @@
+com.ly.art.captcha.service.impl.BlockPuzzleCaptchaServiceImpl
+com.ly.art.captcha.service.impl.ClickWordCaptchaServiceImpl
+com.ly.art.captcha.service.impl.DefaultCaptchaServiceImpl

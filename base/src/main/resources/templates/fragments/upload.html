@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="uploadImg">
+        <!-- 上传组件 -->
+        <div class="modal fade" id="uploadImgModal" tabindex="-1" role="dialog" aria-labelledby="uploadImgModalLabel" aria-hidden="true" data-global="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="uploadImgModalLabel">上传图片</h4>
+                    </div>
+                    <div class="modal-body">
+                      <div class="input-group">
+                            <input type="file" name="commonUploadFile" id="commonUploadFile" class="btn-file"/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>&nbsp;&nbsp;
+                        <button type="button" class="btn btn-primary" id="uploadImgSubmit">上传</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+        <script type="text/javascript">
+        var uploadPicture = function(urlId, pvwId) {
+            var uploadSucc = function(resultUrl) {
+                $("#" + urlId).val(resultUrl);
+                $("#" + pvwId).attr('src', resultUrl);
+            };
+
+            uploadImg(uploadSucc);
+        };
+
+        var uploadImg = function(uploadSuccHandler) {
+            var uploadImage = function(callback){
+                var callbackResult = {};
+                callbackResult.uploadSucc = false;
+                $.ajaxFileUpload({
+                    url: 'api/uploadImg',
+                    type: 'post',
+                    secureuri: false,
+                    fileElementId: 'commonUploadFile',
+                    dataType: 'json',
+                    success: function(resp, status){  
+                        if (resp.code == '0000') {
+                            callbackResult.uploadSucc = true;
+                            callbackResult.imagePath = resp.data.imagePath;
+                        } else {
+                            parent.layer.msg(resp.message);
+                        }
+                        callback(callbackResult);
+                    },
+                    error: function(data, status, e){
+                        parent.layer.msg("上传失败，刷新后重试！");
+                        callback(callbackResult);
+                    }
+                });
+            },
+            validateUploadImage = function() {
+                var flag = true;
+                var str = $("#commonUploadFile").val();
+                if(str.length!=0){
+                   var reg = ".*\\.(jpg|png|gif|jpeg|JPG|PNG|GIF|JPEG)";
+                   var r = str.match(reg);
+                   if(r == null){
+                       flag = false;
+                       parent.layer.msg("对不起，您的图片格式不正确，请重新上传!图片格式：(jpg|png|gif|jpeg|JPG|PNG|GIF|JPEG)");
+                   }
+                } else {
+                    flag = false;
+                    parent.layer.msg("请先选择文件");
+                }
+                return flag;
+            };
+
+            $("#commonUploadFile").val("");
+            $("#uploadImgSubmit").unbind();
+            $('#uploadImgModal').modal('show');
+            $("#uploadImgSubmit").click(function(){
+                if(!validateUploadImage()){
+                    return;
+                }
+
+                parent.layer.load(2);
+
+                uploadImage(function(callbackResult) {
+                    var uploadSucc = callbackResult.uploadSucc;
+                    if (uploadSucc) {
+                        var imagePath = callbackResult.imagePath;
+                        uploadSuccHandler(imagePath);
+                    }
+
+                    parent.layer.closeAll('loading');
+
+                    $('#uploadImgModal').modal('hide');
+                });
+            });
+        };
+        </script>
+    </div>
+
+    <div th:fragment="uploadAttachFile">
+        <link rel="stylesheet" th:href="@{vendor/dropify/dropify.css}">
+        <!-- 上传组件 -->
+        <div class="modal fade" id="uploadAttachFileModal" tabindex="-1" role="dialog" aria-labelledby="uploadAttachFileModalLabel" aria-hidden="true" data-global="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title" id="uploadAttachFileModalLabel">上传</h4>
+                    </div>
+                    <div class="modal-body">
+                      <div class="input-group center-block">
+                            <input type="file" name="attachFile" id="attachFile" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>&nbsp;&nbsp;
+                        <button type="button" class="btn btn-primary" id="uploadAttachFileSubmit">上传</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+        <script th:src="@{vendor/dropify/dropify.min.js}"></script>
+        <script type="text/javascript">
+        var uploadFile = function(keyId, nameId, validateReg) {
+            var uploadSucc = function(fileKey, fileName) {
+                $("#" + keyId).val(fileKey);
+                $("#" + nameId).val(fileName);
+            };
+
+            validateFile = function() {
+                var str = $("#attachFile").val();
+                if(str.length == 0){
+                    parent.layer.msg('对不起，请先选择一个文件!');
+                    return false;
+                }
+                if (validateReg == undefined || validateReg == '') {
+                    return true;
+                }
+                var flag = true;
+                var r = str.match(validateReg);
+                if(r == null){
+                    flag = false;
+                    parent.layer.msg('对不起，您的选择的文件格式不正确，请重新选择!');
+                }
+                return flag;
+            };
+
+            uploadAttachFile(uploadSucc, validateFile);
+        };
+
+        var uploadAttachFile = function(uploadSuccHandler, validateFileHandler) {
+            var uploadHandler = function(callback){
+                var callbackResult = {};
+                callbackResult.uploadSucc = false;
+                $.ajaxFileUpload({
+                    url: 'api/uploadFile',
+                    type: 'post',
+                    secureuri: false,
+                    fileElementId: 'attachFile',
+                    dataType: 'json',
+                    success: function(resp, status){  
+                        if (resp.code == '0000') {
+                            callbackResult.uploadSucc = true;
+                            callbackResult.fileKey = resp.data.fileNo;
+                            callbackResult.fileName = resp.data.fileName;
+                        } else {
+                            parent.layer.msg(resp.message);
+                        }
+                        callback(callbackResult);
+                    },
+                    error: function(data, status, e){ 
+                        parent.layer.msg("上传失败，刷新后重试！")
+                        callback(callbackResult);
+                    }
+                });
+            };
+
+            var drDestroy = $('#attachFile').dropify();
+            drDestroy = drDestroy.data('dropify');
+
+            $("#attachFile").val("");
+            $("#uploadAttachFileSubmit").unbind();
+            $('#uploadAttachFileModal').modal('show');
+
+            $("#uploadAttachFileSubmit").click(function(){
+                if(!validateFileHandler()){
+                    return;
+                }
+
+                parent.layer.load(2);
+                $('#uploadAttachFileModal').modal('hide');
+                if (drDestroy.isDropified()) {
+                    drDestroy.destroy();
+                }
+
+                uploadHandler(function(callbackResult) {
+                    var uploadSucc = callbackResult.uploadSucc;
+                    if (uploadSucc) {
+                        var fileKey = callbackResult.fileKey;
+                        var fileName = callbackResult.fileName;
+                        uploadSuccHandler(fileKey, fileName);
+                    }
+
+                    parent.layer.closeAll('loading');
+                });
+            });
+        };
+        </script>
+    </div>
+
+</body>
+</html>

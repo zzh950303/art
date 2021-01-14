@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<!--  navbar-left start-->
+<ul class="nav navbar-toolbar navbar-left" th:fragment="navbar-left">
+    <li class="hidden-float">
+        <a data-toggle="menubar" class="hidden-float" href="javascript:;" role="button" id="admui-toggleMenubar">
+            <i class="icon hamburger hamburger-arrow-left">
+                <span class="sr-only">切换目录</span>
+                <span class="hamburger-bar"></span>
+            </i>
+        </a>
+    </li>
+    <li class="navbar-menu nav-tabs-horizontal nav-tabs-animate is-load" id="admui-navbar">
+        <ul class="nav navbar-toolbar nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a data-toggle="tab" href="#navTabsItem-0" aria-controls="navTabsItem-0" role="tab" aria-expanded="false">
+                    <i class="icon wb-settings"></i> <span>系统管理</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul>
+<!--  navbar-left end-->
+
+<!--  navTabs start-->
+<div class="tab-content height-full" id="admui-navTabs" th:fragment="nav-tabs">
+    <!--  navTabsItem start-->
+    <div class="tab-pane animation-fade height-full active" id="navTabsItem-0" role="tabpanel">
+        <ul class="site-menu">
+            <li class="site-menu-category">系统信息</li>
+            <li class="site-menu-item">
+                <a th:href="@{system/settings/display}" data-iframe target="_blank">
+                    <i class="site-menu-icon fa-gear" aria-hidden="true"></i>
+                    <span class="site-menu-title">显示设置</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!--  navTabsItem end-->
+</div>
+<!--  navTabs end-->
+</html>
